@@ -1,0 +1,32 @@
+link_executables() {
+  local source=$1
+  local destination=$2
+
+  mk_cd_dir "${destination}" \
+  && find "${source}" -perm -111 -type f -exec readlink -f {} \; | xargs -L1 -I {} ln -s {} .
+  return $?
+}
+
+link_selected_executables() {
+  local source=$1; shift
+  local destination=$1; shift
+
+  if [[ -z "${destination}" ]]; then
+    return 0
+  fi
+
+  mk_cd_dir "${destination}"
+  if [[ "$?" != "0" ]]; then
+    return 1
+  fi
+  for var in "${@}"; do
+    find "${source}" -perm -111 -type f -name "$var" -exec readlink -f {} \; | xargs -L1 -I {} ln -s {} .
+    status=( "${PIPESTATUS[@]}" )
+    if [[ "${status[0]}" != "0" || "${status[1]}" != "0" ]]; then
+      echo "Failed to process executable $var"
+      return 1
+    fi
+  done 
+  return 0
+}
+

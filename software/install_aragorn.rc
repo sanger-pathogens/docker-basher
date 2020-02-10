@@ -1,0 +1,23 @@
+
+
+install_aragorn() {
+  local version=$1
+  local install_path=$2
+
+  local temp_dir=$(tmp_dir)
+  local name="aragorn${version}"
+  local archive="${name}.tgz"
+  local url="http://mbio-serv2.mbioekol.lu.se/ARAGORN/Downloads/${archive}"
+
+  apt_install build-essential \
+  && download_unarchive "${temp_dir}" "${url}" "${archive}" \
+  && cd "${temp_dir}/${name}" \
+  && mkdir -p "${install_path}/${name}" \
+  && gcc -O3 -ffast-math -finline-functions -o "${install_path}/${name}/aragorn" "aragorn${version}.c" \
+  && chmod -R 755 "${install_path}/${name}" \
+  && rm -rf "${temp_dir}" \
+  && apt_purge build-essential
+
+  return $?
+}
+

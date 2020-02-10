@@ -1,0 +1,38 @@
+_dzil_install_preamble(){
+  local url=$1
+  local branch=$2
+  local temp_dir=$3
+
+  git_clone "${temp_dir}" "${url}" "${branch}" \
+  && cd "${temp_dir}" \
+  && dzil authordeps --missing | cpanm --notest && dzil listdeps --missing | cpanm --notest
+
+  return $?
+
+}
+
+dzil_install() {
+  local url=$1
+  local branch=$2
+  local temp_dir=$(tmp_dir)
+ 
+  _dzil_install_preamble "${url}" "${branch}" "${temp_dir}" \
+  && dzil install \
+  && rm -rf "${temp_dir}"
+
+  return $?
+}
+
+dzil_install_no_test() {
+  local url=$1
+  local branch=$2
+
+  local temp_dir=$(tmp_dir)
+
+  _dzil_install_preamble "${url}" "${branch}" "${temp_dir}" \
+  && dzil install --install-command "cpanm --notest ." \
+  && rm -rf "${temp_dir}"
+
+  return $?
+}
+

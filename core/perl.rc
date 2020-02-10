@@ -1,0 +1,26 @@
+install_uk_locals() {
+  apt_install locales \
+  && locale-gen en_GB.UTF-8 \
+  && apt_purge
+}
+
+cpanm_install() {
+  cpanm --notest "${@}" \
+  && rm -rf /root/.cpanm
+}
+
+install_cpanm_only() {
+  local version=$1
+  local directory=$2
+
+  local temp_dir=$(tmp_dir)
+  local archive=cpanminus-${version}.tar.gz
+  local url=https://github.com/miyagawa/cpanminus/archive/${version}.tar.gz
+
+  apt_install perl make \
+  && download_unarchive "$temp_dir" "${url}" "${archive}" \
+  && mv "${temp_dir}/cpanminus-${version}/cpanm" "${directory}" \
+  && rm -rf "$temp_dir"
+  return $?
+}
+
