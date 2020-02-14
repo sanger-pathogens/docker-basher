@@ -1,0 +1,15 @@
+
+install_blast() {
+  local directory=$1
+  local version=$2
+
+  local name=ncbi-blast-${version}+
+  local archive=${name}-x64-linux.tar.gz
+  local url=ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/${archive}
+
+  download_unarchive "${directory}" "${url}" "${archive}" \
+  && add_to_path "${directory}/${name}/bin"
+
+  return $?
+}
+

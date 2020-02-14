@@ -1,0 +1,18 @@
+install_bedtools() {
+  local directory=$1
+  local version=$2
+
+  local temp_dir=$(tmp_dir)
+  local archive=bedtools-${version}.tar.gz
+  local install_dir=${directory}/bedtools-${version}
+
+  apt_install build-essential zlib1g zlib1g-dev libbz2-1.0 libbz2-dev liblzma5 liblzma-dev python \
+  && download_unarchive "${temp_dir}" https://github.com/arq5x/bedtools2/releases/download/v${version}/${archive} ${archive} \
+  && cd $temp_dir/bedtools2 \
+  && make \
+  && mkdir -p ${directory} \
+  && cp -r  $temp_dir/bedtools2/bin ${install_dir} \
+  && chmod -R 755 ${install_dir} \
+  && add_to_path ${install_dir} \
+  && apt_purge build-essential zlib1g-dev libbz2-dev liblzma-dev python 
+}

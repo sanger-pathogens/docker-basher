@@ -1,0 +1,15 @@
+
+
+install_infernal() {
+  local version=$2
+  local install_path=$1
+
+  local name="infernal-${version}-linux-intel-gcc"
+  local archive="${name}.tar.gz"
+  local url="http://eddylab.org/infernal/${archive}"
+
+  download_unarchive "${install_path}" "${url}" "${archive}" \
+  && add_to_path "${install_path}/${name}/binaries"
+
+  return $?
+}

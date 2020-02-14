@@ -1,7 +1,8 @@
 install_uk_locals() {
   apt_install locales \
   && locale-gen en_GB.UTF-8 \
-  && apt_purge
+  && apt_purge \
+  && add_environment LANG=en_GB.UTF-8 LANGUAGE=en_GB:en LC_ALL=en_GB.UTF-8
 }
 
 cpanm_install() {

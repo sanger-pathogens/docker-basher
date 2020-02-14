@@ -1,0 +1,19 @@
+
+install_tbl2asn() {
+  local install_path=$1
+  local temp_dir=$(tmp_dir)
+
+  apt_install libidn11 \
+  && mkdir -p ${install_path} \
+  && download_unzip ${temp_dir} ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools/converters/by_program/tbl2asn/linux64.tbl2asn.gz tbl2asn.gz \
+  && chmod -R 755 ${temp_dir} \
+  && ${temp_dir}/tbl2asn --help | grep '^tbl2asn' | sed 's:^tbl2asn ::g' | sed 's~[[:space:]]*arguments:[[:space:]]*$~~g' \
+  && export tbl2asn_version=$(${temp_dir}/tbl2asn --help | grep '^tbl2asn' | sed 's:^tbl2asn ::g' | sed 's~[[:space:]]*arguments:[[:space:]]*$~~g') \
+  && cp -r ${temp_dir} ${install_path}/tbl2asn-${tbl2asn_version} \
+  && add_to_path ${install_path}/tbl2asn-${tbl2asn_version} \
+  && unset tbl2asn_version \
+  && rm -rf ${temp_dir}
+
+  return $?
+}
+

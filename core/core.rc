@@ -1,9 +1,3 @@
-install_uk_locals() {
-  apt_install locales \
-  && locale-gen en_GB.UTF-8 \
-  && apt_purge
-}
-
 tmp_dir() {
  local dir=$(mktemp -d -t basher-XXXXXXXXXX)
  echo $dir
@@ -136,4 +130,26 @@ git_clone() {
   && ( [[ "$branch" == "master" ]] || ( cd "${directory}" && git checkout $branch ) )
 
   return $?
+}
+
+add_environment() {
+  for i in "${@}"; do
+    echo "$i" >> /etc/docker-basher.rc
+  done
+}
+
+add_to_path() {
+  local to_add=""
+
+  if [[ ! -z "${DOCKER_BASHER_NO_PATH}" ]]; then
+    return 0
+  fi
+  if [ $# -gt 1 ]; then
+    for i in "${@}"; do
+      to_add="${to_add}":$i
+    done
+  else
+    to_add=$1
+  fi
+  add_environment "PATH=${to_add}:\$PATH"
 }
