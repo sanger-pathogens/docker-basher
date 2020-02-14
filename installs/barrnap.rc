@@ -1,0 +1,12 @@
+install_barrnap() {
+  local directory=$1
+  local version=$2
+
+  local install_path=${directory}/barnap-${version}
+
+  install_uk_locals \
+  && apt_install git \
+  && git_clone ${install_path} https://github.com/tseemann/barrnap.git ${version} \
+  && add_to_path ${install_path}/bin \
+  && apt_purge git
+}

@@ -1,0 +1,18 @@
+
+
+install_rnammer() {
+  local directory=$1
+  local version=$2
+  local hmmsearch_location=$3
+
+  local name=rnammer-"${version}"
+  local archive="${name}".src.tar.Z
+  local install_path="${directory}/${name}"
+  install_archive "${install_path}" "/tmp/${archive}" \
+  && sed -i 's:/usr/cbs/bio/src/rnammer-'"${version}"':'"${install_path}"':g' "${install_path}/rnammer" \
+  && sed -i 's:/usr/cbs/bio/bin/linux64/hmmsearch:'"${hmmsearch_location}"':g' "${install_path}/rnammer" \
+  && add_to_path "${install_path}"
+
+  return $?
+}
+

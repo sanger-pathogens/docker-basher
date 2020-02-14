@@ -1,8 +1,8 @@
 
 
 install_samtools() {
-  local version=$1
-  local install_path=$2
+  local version=$2
+  local install_path=$1
 
   local archive=samtools-${version}.tar.bz2
   local url=https://sourceforge.net/projects/samtools/files/samtools/${version}/${archive}/download
@@ -12,7 +12,8 @@ install_samtools() {
   && chmod 755 "${install_path}/samtools-${version}" \
   && cd "${install_path}/samtools-${version}" \
   && make \
-  && apt_purge lbzip2 build-essential zlib1g-dev libncurses5-dev libbz2-dev liblzma-dev
+  && apt_purge lbzip2 build-essential zlib1g-dev libncurses5-dev libbz2-dev liblzma-dev \
+  && add_to_path "${install_path}/samtools-${version}"
 
   return $?
 }

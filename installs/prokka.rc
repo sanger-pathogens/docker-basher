@@ -1,0 +1,22 @@
+install_prokka() {
+  local directory=$1
+  local version=$2
+
+  local install_path=${directory}/prokka-${version}
+
+  install_uk_locals \
+  && apt_install_cleanly \
+       libdatetime-perl \
+       libxml-simple-perl \
+       libdigest-md5-perl \
+       git \
+       default-jre \
+       bioperl \
+       cpanminus \
+       parallel \
+       build-essential \
+  && cpanm_install Bio::Perl \
+  && git_clone ${install_path} https://github.com/tseemann/prokka.git v${version} \
+  && add_to_path ${install_path}/bin ${install_path}/binaries/linux ${install_path}/binaries/common \
+  && apt_purge build-essential git cpanminus
+}

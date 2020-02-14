@@ -1,8 +1,8 @@
 
 
 install_hmmer() {
-  local version=$1
-  local install_path=$2
+  local version=$2
+  local install_path=$1
 
   local name="hmmer-${version}"
   local archive="${name}.tar.gz"
@@ -10,7 +10,8 @@ install_hmmer() {
 
   apt_install build-essential \
   && download_configure_make_install "${url}" "${archive}" "${name}" --enable-threads --prefix "${install_path}/${name}" \
-  && apt_purge build-essential 
+  && apt_purge build-essential \
+  && add_to_path "${install_path}/${name}/bin"
 
   return $?
 }

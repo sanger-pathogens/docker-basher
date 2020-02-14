@@ -1,0 +1,26 @@
+install_apps(){
+  local directory=$1; shift
+
+  local app
+  local no_path
+  for app in "${@}"; do
+    local split
+    split=( $(echo $app | tr ':' ' ') )
+    local function_call=()
+    if [ "${split[0]}" == "NO_PATH" ]; then
+      no_path=true
+      split=( "${split[@]:1}" )
+    fi
+    local function="install_${split[0]}"
+    function_call=( "${function_call[@]}" $function $directory "${split[@]:1}" )
+    if [ ! -z $no_path ]; then
+      DOCKER_BASHER_NO_PATH=true "${function_call[@]}"
+    else
+      "${function_call[@]}"
+    fi
+    if [[ "$?" != "0" ]]; then
+      echo "Failed calling $function"
+      return 1
+    fi
+  done
+}
