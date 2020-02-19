@@ -125,9 +125,13 @@ git_clone() {
   local url=$2
   local branch=$3
 
-  mkdir -p "${directory}" \
-  && git clone "${url}" "${directory}" \
-  && ( [[ "$branch" == "master" ]] || ( cd "${directory}" && git checkout $branch ) )
+  local base=$(basename "${directory}")
+  local parent=$(dirname "${directory}")
+
+  mkdir -p ${parent} \
+  && cd ${parent} \
+  && git clone "${url}" "${base}" \
+  && ( [[ "$branch" == "master" ]] || ( cd "${base}" && git checkout $branch ) )
 
   return $?
 }
@@ -152,4 +156,14 @@ add_to_path() {
     to_add=$1
   fi
   add_environment "PATH=${to_add}:\$PATH"
+}
+
+replace_dir_with_link() {
+  local directory=$1
+  local link=$2
+
+  rm -rf "${directory}" \
+  && ln -s "${link}" "${directory}"
+
+  return $?
 }
