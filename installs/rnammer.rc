@@ -10,7 +10,7 @@ install_rnammer() {
   local install_path="${directory}/${name}"
   install_archive "${install_path}" "/tmp/${archive}" \
   && sed -i 's:/usr/cbs/bio/src/rnammer-'"${version}"':'"${install_path}"':g' "${install_path}/rnammer" \
-  && sed -i 's:/usr/cbs/bio/bin/linux64/hmmsearch:'"${hmmsearch_location}"':g' "${install_path}/rnammer" \
+  && sed -i 's:/usr/cbs/bio/bin/linux64/hmmsearch:'"${hmmsearch_location}/hmmsearch"':g' "${install_path}/rnammer" \
   && add_to_path "${install_path}"
 
   return $?
