@@ -138,7 +138,7 @@ git_clone() {
 
 add_environment() {
   for i in "${@}"; do
-    echo "$i" >> /etc/docker-basher.rc
+    echo export "$i" >> /etc/docker-basher.rc
   done
 }
 
