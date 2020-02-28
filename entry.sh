@@ -1,5 +1,5 @@
 #!/bin/bash
 
-source /etc/docker-basher.rc
+[ -f /etc/docker-basher.rc ] && source /etc/docker-basher.rc
 
 exec "$@"
