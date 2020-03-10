@@ -1,0 +1,27 @@
+install_bcftools() {
+  local install_path=$1
+  local version=$2
+
+  local temp_dir=$(tmp_dir)
+  local name=bcftools-${version}
+  local archive=${name}.tar.bz2
+  local url=https://github.com/samtools/bcftools/releases/download/${version}/${archive}
+
+  apt_install build-essential zlib1g zlib1g-dev \
+  && download_unarchive "${temp_dir}" "${url}" "${archive}" \
+  && cd "${temp_dir}/${name}" \
+  && make \
+  && mkdir -p ${install_path}/${name} \
+  && mv bcftools "${install_path}/${name}" \
+  && chmod -R 755 "${install_path}/${name}" \
+  && add_to_path "${install_path}/${name}" \
+  && apt_purge build-essential zlib1g-dev \
+  && rm -rf "${temp_dir}"
+
+
+#lbzip2 zlib1g libbz2-1.0 libncurses5 liblzma5 build-essential zlib1g-dev libncurses5-dev libbz2-dev liblzma-dev \
+
+  #&& apt_purge lbzip2 build-essential zlib1g-dev libncurses5-dev libbz2-dev liblzma-dev \
+
+  return $?
+}
