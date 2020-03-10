@@ -1,0 +1,18 @@
+install_bwa() {
+  local directory=$1
+  local version=$2
+
+  local temp_dir=$(tmp_dir)
+  local name="bwa-${version}"
+  local install_path="${directory}/bwa-${version}"
+
+  apt_install build-essential zlib1g zlib1g-dev \
+    && download_unarchive $temp_dir https://github.com/lh3/bwa/archive/${version}.tar.gz ${name}.tar.gz \
+    && cd "${temp_dir}/${name}" \
+    && make \
+    && mkdir -p "${install_path}" \
+    && mv bwa "${install_path}" \
+    && rm -rf "${temp_dir}" \
+    && apt_purge build-essential zlib1g-dev \
+    && add_to_path "${install_path}"
+}
