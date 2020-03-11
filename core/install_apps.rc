@@ -10,10 +10,12 @@ install_apps(){
     if [ "${split[0]}" == "NO_PATH" ]; then
       no_path=true
       split=( "${split[@]:1}" )
+    else
+      no_path=false
     fi
     local function="install_${split[0]}"
     function_call=( "${function_call[@]}" $function $directory "${split[@]:1}" )
-    if [ ! -z $no_path ]; then
+    if [ "${no_path}" != "false" ]; then
       DOCKER_BASHER_NO_PATH=true "${function_call[@]}"
     else
       "${function_call[@]}"
