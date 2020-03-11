@@ -2,9 +2,9 @@ install_apps(){
   local directory=$1; shift
 
   local app
-  local no_path
   for app in "${@}"; do
     local split
+    local no_path
     split=( $(echo $app | tr ':' ' ') )
     local function_call=()
     if [ "${split[0]}" == "NO_PATH" ]; then
